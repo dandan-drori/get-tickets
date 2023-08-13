@@ -1,5 +1,16 @@
-import axios from 'axios';
 import 'dotenv/config';
+import axios from 'axios';
+import express from 'express';
+
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello, welcome to get-tickets!\nWe will notify you via Telegram when the tickets you requested are available for purchase!');
+});
+
+app.listen(3030, () => {
+  console.log('Server is running on port 3030');
+});
 
 (async () => {
   const maxRunsCount = 7200;
@@ -23,7 +34,7 @@ import 'dotenv/config';
 
 async function sendTelegramMessage() {
   const telegramUrl = `${process.env.TELEGRAM_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${process.env.CHAT_ID}&text=`;
-  const message = `Your tickets are ready for purchase!\n Go to ${process.env.TICKETS_URL}`;
+  const message = `Your tickets are ready for purchase!\nGo to ${process.env.TICKETS_URL}`;
   try {
     await axios.get(telegramUrl + message);
   } catch (err) {
