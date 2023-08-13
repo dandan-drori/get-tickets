@@ -6,17 +6,9 @@ import 'dotenv/config';
   let counter = 0;
   const intervalId = setInterval(async () => {
     try {
-      const res = await axios.get(process.env.TICKETS_URL);
-      const html = res.data;
-      const isTicketsAvailableForPurchase = !html.search('btn btn-info btn-inactive');
+      const isTicketsAvailableForPurchase = await getTicketsStatus();
       if (isTicketsAvailableForPurchase) {
-        const telegramUrl = `${process.env.TELEGRAM_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${process.env.CHAT_ID}&text=`;
-        const message = `Your tickets are ready for purchase!\n Go to ${process.env.TICKETS_URL}`;
-        try {
-          await axios.get(telegramUrl + message);
-        } catch (err) {
-          console.log(err);
-        }
+        await sendTelegramMessage();
         clearInterval(intervalId);
       }
       counter++;
@@ -29,3 +21,22 @@ import 'dotenv/config';
   }, 1000 * 60 * 15);
 })();
 
+async function sendTelegramMessage() {
+  const telegramUrl = `${process.env.TELEGRAM_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${process.env.CHAT_ID}&text=`;
+  const message = `Your tickets are ready for purchase!\n Go to ${process.env.TICKETS_URL}`;
+  try {
+    await axios.get(telegramUrl + message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getTicketsStatus() {
+  try {
+    const res = await axios.get(process.env.TICKETS_URL);
+    const html = res.data;
+    return !html.search('btn btn-info btn-inactive');
+  } catch (err) {
+    console.log(err);
+  }
+}
