@@ -2,6 +2,8 @@ import axios from 'axios';
 import 'dotenv/config';
 
 (async () => {
+  const maxRunsCount = 7200;
+  let counter = 0;
   const intervalId = setInterval(async () => {
     try {
       const res = await axios.get(process.env.TICKETS_URL);
@@ -15,6 +17,10 @@ import 'dotenv/config';
         } catch (err) {
           console.log(err);
         }
+        clearInterval(intervalId);
+      }
+      counter++;
+      if (counter >= maxRunsCount) {
         clearInterval(intervalId);
       }
     } catch (err) {
