@@ -17,5 +17,5 @@ export async function startTicketsCheck() {
         } catch (err) {
             console.log(err);
         }
-    }, 1000 * 10);
+    }, 1000 * 60 * 30);
 };
