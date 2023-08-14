@@ -47,8 +47,10 @@ async function getTicketsStatus() {
     const res = await axios.get(process.env.TICKETS_URL);
     const html = res.data;
     const location = html.search('Israel - Tel Aviv');
-    const htmlAfterLocation = html.substring(location);
-    const ticketsButtonIsInactive = htmlAfterLocation.search('btn btn-info btn-inactive');
+    const nextLocation = html.search('North Macedonia - Skopje');
+    const nextLocationChecked = nextLocation === -1 ? undefined : nextLocation;
+    const htmlAfterLocationAndBeforeNextLocation = html.substring(location, nextLocationChecked);
+    const ticketsButtonIsInactive = htmlAfterLocationAndBeforeNextLocation.search('btn btn-info btn-inactive');
     return ticketsButtonIsInactive === -1;
   } catch (err) {
     console.log(err);
