@@ -18,7 +18,7 @@ app.listen(3030, () => {
   const intervalId = setInterval(async () => {
     try {
       const isTicketsAvailableForPurchase = await getTicketsStatus();
-      if (!isTicketsAvailableForPurchase) {
+      if (isTicketsAvailableForPurchase) {
         await sendTelegramMessage();
         clearInterval(intervalId);
       }
@@ -29,7 +29,7 @@ app.listen(3030, () => {
     } catch (err) {
       console.log(err);
     }
-  }, 1000 * 60 * 2);
+  }, 1000 * 60 * 15);
 })();
 
 async function sendTelegramMessage() {
