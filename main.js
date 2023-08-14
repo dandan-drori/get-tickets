@@ -33,10 +33,10 @@ app.listen(3030, () => {
 })();
 
 async function sendTelegramMessage() {
-  const telegramUrl = `${process.env.TELEGRAM_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${process.env.CHAT_ID}&text=`;
   const message = `Your tickets are ready for purchase!\nGo to ${process.env.TICKETS_URL}`;
+  const telegramUrl = `${process.env.TELEGRAM_URL}${process.env.BOT_TOKEN}/sendMessage?chat_id=${process.env.CHAT_ID}&text=${message}`;
   try {
-    await axios.get(telegramUrl + message);
+    await axios.get(telegramUrl);
   } catch (err) {
     console.log(err);
   }
